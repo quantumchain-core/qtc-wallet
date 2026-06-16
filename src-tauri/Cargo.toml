@@ -1,0 +1,37 @@
+[package]
+name = "qtc-wallet"
+version = "0.1.0"
+edition = "2021"
+
+# Tauri build profile â€” smaller binary for distribution
+[profile.release]
+panic = "abort"
+codegen-units = 1
+lto = true
+opt-level = "s"
+strip = true
+
+[dependencies]
+# Tauri core
+tauri = { version = "1.6", features = ["clipboard-write-text"] }
+
+# Post-quantum crypto â€” same crate + same variant as qc-node (M1, locked)
+# Dilithium2: pk=1312 bytes, sk=2560 bytes, sig=2420 bytes
+pqcrypto-dilithium = "0.5"
+pqcrypto-traits     = "0.3"
+
+# SHA3-256 for address derivation (address = SHA3-256(pubkey), matches M10 registry)
+sha3 = "0.10"
+
+# Serialization â€” wallet state saved to disk
+serde      = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Hex encoding/decoding (for keystore file + RPC display)
+hex = "0.4"
+
+# Secure random for keypair generation
+rand = "0.8"
+
+[build-dependencies]
+tauri-build = { version = "1.5", features = [] }
